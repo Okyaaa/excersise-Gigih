@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { toHaveAccessibleDescription } from "@testing-library/jest-dom/dist/matchers";
+import './Search.css';
 
 class Index extends React.Component {
   constructor() {
@@ -16,17 +16,16 @@ class Index extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ 
-      searchQuery: event.target.value 
+    this.setState({
+      searchQuery: event.target.value,
     });
   }
 
-
   onSubmit = async (event) => {
     axios
-      .get('//api.giphy.com/v1/gifs/search', {
+      .get("//api.giphy.com/v1/gifs/search", {
         params: {
-          api_key: '91RiJwgLGG5OKbx6ymBbQBPYRVABPNxA',
+          api_key: process.env.REACT_APP_GIPHY_CLIENTID,
           q: `${this.state.searchQuery}`,
           limit: 12,
           offset: 0,
@@ -38,8 +37,8 @@ class Index extends React.Component {
       .then((response) => {
         const data = response.data.data;
         console.log(data);
-        this.setState({ 
-          searchResult: data
+        this.setState({
+          searchResult: data,
         });
         console.log("search result =  ", this.state.searchResult);
       })
@@ -57,9 +56,13 @@ class Index extends React.Component {
           <button type="submit" value="submit">
             Submit
           </button>
-          {
-            this.state.searchResult.map(item => (<img src={item.images.original.url} />))
-          }
+          <ul>
+            <li>
+              {this.state.searchResult.map((item) => (
+                <img className="images" src={item.images.original.url} />
+              ))}
+            </li>
+          </ul>
         </form>
       </div>
     );
