@@ -1,3 +1,8 @@
+.Search {
+    flex-direction: column;
+    text-align: center;
+}
+
 .images {
     width: 400px;
     height: 400px;

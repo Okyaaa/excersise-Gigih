@@ -1,46 +1,46 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import './Search.css';
+import "./Search.css";
+import SearchForm from "../../components/search-component/SearchForm";
+import { useSelector, useDispatch } from "react-redux";
+import { saving } from "../../redux/query-actions";
 
-class Index extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      searchQuery: "",
-      searchResult: [],
-    };
+const Search = () => {
+  const currentQuery = useSelector((state) => state.query.value);
+  const dispatch = useDispatch();
+  const [searchResult, setSearchResult] = useState([]);
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    // this.handleSearch = this.handleSearch.bind(this);
-  }
+  // const [form, setForm] = useState({
+  //   search: "",
+  // });
 
-  handleChange(event) {
-    this.setState({
-      searchQuery: event.target.value,
-    });
-  }
+  const handleChange = (event) => {
+    // setForm({
+    //   search: event.target.value,
+    // });
+    dispatch(saving(event.target.value));
+  };
 
-  onSubmit = async (event) => {
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setForm({ ...form, [name]: value });
+  //   console.log(form.search);
+  // };
+
+  const onSubmit = async (event) => {
     axios
       .get("//api.giphy.com/v1/gifs/search", {
         params: {
           api_key: process.env.REACT_APP_GIPHY_CLIENTID,
-          q: `${this.state.searchQuery}`,
+          q: `${currentQuery}`,
           limit: 12,
           offset: 0,
-          // rating: 'g',
-          // lang: 'en',
-          // random_id: "e826c9fc5c929e0d6c6d423841a282aa",
         },
       })
       .then((response) => {
         const data = response.data.data;
         console.log(data);
-        this.setState({
-          searchResult: data,
-        });
-        console.log("search result =  ", this.state.searchResult);
+        setSearchResult(data);
       })
       .catch((error) => {
         console.log(error);
@@ -48,25 +48,22 @@ class Index extends React.Component {
     event.preventDefault();
   };
 
-  render() {
-    return (
-      <div className="Home">
-        <form onSubmit={this.onSubmit}>
-          <input type="text" id="inpuText" onChange={this.handleChange} />
-          <button type="submit" value="submit">
-            Submit
-          </button>
-          <ul>
-            <li>
-              {this.state.searchResult.map((item) => (
-                <img className="images" src={item.images.original.url} />
-              ))}
-            </li>
-          </ul>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="Search">
+      <SearchForm query={currentQuery} onSubmit={onSubmit} handleChange={handleChange} />
+      {searchResult.map((item) => {
+        return (
+          <img
+            // currentQuery={currentQuery}
+            alt="Images not loaded"
+            className="imagess"
+            src={item.images.original.url}
+            key={item.id}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
-export default Index;
+export default Search;
