@@ -1,12 +1,12 @@
 const SearchForm = (props) => {
-  const { onSubmit, handleChange, form } = props;
+  const { onSubmit, handleChange, currentQuery} = props;
   return (
     <form onSubmit={onSubmit}>
       <input
         type="text"
         id="search"
         name="search"
-        value={form.search}
+        value={currentQuery}
         onChange={handleChange}
         required
       />

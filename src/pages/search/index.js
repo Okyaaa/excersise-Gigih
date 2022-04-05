@@ -1,26 +1,38 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./Search.css";
 import SearchForm from "../../components/search-component/SearchForm";
+import { useSelector, useDispatch } from "react-redux";
+import { saving } from "../../redux/query-actions";
+
 const Search = () => {
+  const currentQuery = useSelector((state) => state.query.value);
+  const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState([]);
 
-  const [form, setForm] = useState({
-    search: '',
-  });
+  // const [form, setForm] = useState({
+  //   search: "",
+  // });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm({ ...form, [name]: value });
-    console.log(form.search);
+    // setForm({
+    //   search: event.target.value,
+    // });
+    dispatch(saving(event.target.value));
   };
+
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setForm({ ...form, [name]: value });
+  //   console.log(form.search);
+  // };
 
   const onSubmit = async (event) => {
     axios
       .get("//api.giphy.com/v1/gifs/search", {
         params: {
           api_key: process.env.REACT_APP_GIPHY_CLIENTID,
-          q: `${form.search}`,
+          q: `${currentQuery}`,
           limit: 12,
           offset: 0,
         },
@@ -38,15 +50,13 @@ const Search = () => {
 
   return (
     <div className="Search">
-      <SearchForm
-        form={form}
-        onSubmit={onSubmit}
-        handleChange={handleChange}
-      />
+      <SearchForm query={currentQuery} onSubmit={onSubmit} handleChange={handleChange} />
       {searchResult.map((item) => {
         return (
           <img
-            className="images"
+            // currentQuery={currentQuery}
+            alt="Images not loaded"
+            className="imagess"
             src={item.images.original.url}
             key={item.id}
           />
