@@ -1,16 +1,16 @@
+import React from "react";
 import "./App.css";
-import Search from "./pages/search";
-// import Index from './pages/home';
-import Index from "./pages/search";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+// import Search from "../src/pages/search";
+import AppRouter from "./components/router/AppRouter";
 
-function App() {
+function App () {
   return (
     <Provider store={store}>
       <div className="App">
         {/* <Search/> */}
-        <Index />
+        <AppRouter/>
       </div>
     </Provider>
   );

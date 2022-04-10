@@ -10,32 +10,21 @@ const Search = () => {
   const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState([]);
 
-  // const [form, setForm] = useState({
-  //   search: "",
-  // });
-
   const handleChange = (event) => {
-    // setForm({
-    //   search: event.target.value,
-    // });
     dispatch(saving(event.target.value));
   };
 
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setForm({ ...form, [name]: value });
-  //   console.log(form.search);
-  // };
-
-  const onSubmit = async (event) => {
+  const onSubmit = async (Event) => {
+    Event.preventDefault();
+    // event.stopPropagation();
     axios
       .get("//api.giphy.com/v1/gifs/search", {
         params: {
           api_key: process.env.REACT_APP_GIPHY_CLIENTID,
           q: `${currentQuery}`,
           limit: 12,
-          offset: 0,
-        },
+          offset: 0
+        }
       })
       .then((response) => {
         const data = response.data.data;
@@ -45,19 +34,22 @@ const Search = () => {
       .catch((error) => {
         console.log(error);
       });
-    event.preventDefault();
   };
 
   return (
     <div className="Search">
-      <SearchForm query={currentQuery} onSubmit={onSubmit} handleChange={handleChange} />
+      <SearchForm
+        query={currentQuery}
+        onSubmit={onSubmit}
+        handleChange={handleChange}
+      />
       {searchResult.map((item) => {
         return (
           <img
             // currentQuery={currentQuery}
             alt="Images not loaded"
             className="imagess"
-            src={item.images.original.url}
+            src={item.images.fixed_height.url}
             key={item.id}
           />
         );
