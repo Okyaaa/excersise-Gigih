@@ -1,9 +1,7 @@
-import { getDefaultMiddleware } from "@reduxjs/toolkit";
-
-function saving(query) {
+function saving (query) {
   return {
     type: "query",
-    payload: query,
+    payload: query
   };
 }
 

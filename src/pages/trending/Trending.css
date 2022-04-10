@@ -1,0 +1,13 @@
+.Search {
+    flex-direction: column;
+    text-align: center;
+}
+
+.images {
+    width: 400px;
+    height: 400px;
+}
+
+.result {
+    margin: 18px 0px;
+}
