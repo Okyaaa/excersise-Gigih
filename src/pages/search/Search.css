@@ -1,9 +1,25 @@
 .Search {
     flex-direction: column;
     text-align: center;
+    margin: 16px 36px;
 }
 
 .images {
     width: 400px;
     height: 400px;
+}
+
+.buttonSearch {
+    height: 50px;
+}
+
+.searchInput {
+    padding-right: 16px;
+}
+
+.form {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
