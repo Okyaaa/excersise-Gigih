@@ -1,10 +1,11 @@
 /* eslint-disable comma-dangle */
-import React, { useState } from "react";
+/* eslint-disable*/
+import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 import "./Search.css";
 // import SearchForm from "../../components/search-component/SearchForm";
 import { useSelector, useDispatch } from "react-redux";
-import { saving } from "../../redux/query-actions";
+// import { saving } from "../../redux/query-actions";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,19 +15,31 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { addToken, selectQuery } from "redux/query-slice";
+
+interface DataApi {
+  id: string;
+  title: string;
+  rating: string;
+  type: string;
+  images: {
+    fixed_height: {
+      url: string;
+    };
+  };
+}
 
 const Search = () => {
-  const currentQuery = useSelector((state) => state.query.value);
+  const currentQuery = useSelector(selectQuery);
   const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState([]);
 
-  const handleChange = (event) => {
-    dispatch(saving(event.target.value));
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch(addToken(event.target.value));
   };
 
-  const onSubmit = async (Event) => {
-    Event.preventDefault();
-    // event.stopPropagation();
+  const onSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
     axios
       .get("//api.giphy.com/v1/gifs/search", {
         params: {
@@ -48,21 +61,7 @@ const Search = () => {
 
   return (
     <div className="Search">
-      {/* <SearchForm
-        query={currentQuery}
-        onSubmit={onSubmit}
-        handleChange={handleChange}
-      /> */}
       <form id="search" className="form" name="search" onSubmit={onSubmit}>
-        {/* <input
-          type="text"
-          id="search"
-          name="search"
-          // query={query}
-          value={props.currentQuery}
-          onChange={props.handleChange}
-          required
-        /> */}
         <div className="searchInput">
           <TextField
             id="outlined-name"
@@ -88,7 +87,7 @@ const Search = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {searchResult.map((row) => (
+            {searchResult.map((row: DataApi) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -99,7 +98,7 @@ const Search = () => {
                 <TableCell align="right">{row.rating}</TableCell>
                 <TableCell align="right">{row.type}</TableCell>
                 <TableCell align="right">
-                  <img src={row.images.fixed_height.url} />
+                  <img src={row?.images.fixed_height.url} className="images"/>
                 </TableCell>
               </TableRow>
             ))}
